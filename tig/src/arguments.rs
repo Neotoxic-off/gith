@@ -5,7 +5,7 @@ pub enum GitCommand {
     Commit { kind: GitCommitKind, message: String }
 }
 
-#[derive(Debug, Clone, clap::ValueEnum)]
+#[derive(Debug, Clone, clap::ValueEnum, PartialEq, Eq, Hash)]
 pub enum GitCommitKind {
     clean,
     deploy,

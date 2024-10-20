@@ -6,29 +6,29 @@ pub struct Git {
     base: Command,
     arguments: Vec<String>,
     raw_arguments: arguments::Arguments,
-    emoji: HashMap<String, String>
+    emoji: HashMap<arguments::GitCommitKind, String>
 }
 
 impl Git {
-    pub fn new(raw_arguments: arguments::Arguments) -> Git {
+    pub fn new(arguments: arguments::Arguments) -> Git {
         Git {
             base: Command::new("git"),
             arguments: Vec::new(),
-            raw_arguments,
+            raw_arguments: arguments,
             emoji: HashMap::from([
-                ("clean".to_string(), "🧽".to_string()),
-                ("deploy".to_string(), "🚀".to_string()),
-                ("documentation".to_string(), "📃".to_string()),
-                ("feature".to_string(), "🌱".to_string()),
-                ("fix".to_string(), "🔧".to_string()),
-                ("init".to_string(), "🎀".to_string()),
-                ("library".to_string(), "📚".to_string()),
-                ("patch".to_string(),  "🐜".to_string()),
-                ("performance".to_string(), "🌡".to_string()),
-                ("revert".to_string(),  "♻️".to_string()),
-                ("rework".to_string(), "🔸".to_string()),
-                ("style".to_string(), "🧁".to_string()),
-                ("test".to_string(), "🧪".to_string())
+                (arguments::GitCommitKind::clean, "🧽".to_string()),
+                (arguments::GitCommitKind::deploy, "🚀".to_string()),
+                (arguments::GitCommitKind::documentation, "📃".to_string()),
+                (arguments::GitCommitKind::feature, "🌱".to_string()),
+                (arguments::GitCommitKind::fix, "🔧".to_string()),
+                (arguments::GitCommitKind::init, "🎀".to_string()),
+                (arguments::GitCommitKind::library, "📚".to_string()),
+                (arguments::GitCommitKind::patch,  "🐜".to_string()),
+                (arguments::GitCommitKind::performance, "🌡".to_string()),
+                (arguments::GitCommitKind::revert,  "♻️".to_string()),
+                (arguments::GitCommitKind::rework, "🔸".to_string()),
+                (arguments::GitCommitKind::style, "🧁".to_string()),
+                (arguments::GitCommitKind::test, "🧪".to_string())
             ])
         }
     }
@@ -58,7 +58,7 @@ impl Git {
         let mut args = vec!["commit".to_string()];
 
         args.push("-m".to_string());
-        args.push(format!("{:?}: {}", kind, message));
+        args.push(format!("{:?} {:?}: {}", self.emoji.get(kind), kind, message));
 
         args
     }
