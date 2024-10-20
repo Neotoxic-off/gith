@@ -63,9 +63,9 @@ impl Git {
         args
     }
 
-    fn get_add_arguments(&self, files: &Vec<String>) -> Vec<String> {
-        let mut args = vec!["add".to_string()];  // Start with "git add"
-        args.extend(files.iter().cloned());       // Add the files to the arguments
-        args
-    }
+    // fn get_add_arguments(&self, files: &Vec<String>) -> Vec<String> {
+    //     let mut args = vec!["add".to_string()];  // Start with "git add"
+    //     args.extend(files.iter().cloned());       // Add the files to the arguments
+    //     args
+    // }
 }
