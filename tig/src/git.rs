@@ -1,38 +1,54 @@
-use std::process::{Command, Stdio};
+use std::{fmt::format, process::{Command, Stdio}};
+use crate::arguments;
 
 pub struct Git {
     base: Command,
-    arguments: Vec<(String, String)>
+    arguments: Vec<String>,
+    raw_arguments: arguments::Arguments,
 }
 
 impl Git {
-    pub fn new() -> Git {
+    pub fn new(raw_arguments: arguments::Arguments) -> Git {
         Git {
             base: Command::new("git"),
             arguments: Vec::new(),
+            raw_arguments,
         }
     }
 
     pub fn exec(&mut self) -> std::io::Result<()> {
-        let arguments = self.flattern_arguments();
+        self.build_arguments();
 
-        self.base.args(&arguments).stdout(Stdio::inherit()).spawn()?;
+        println!("{}", &self.arguments.concat());
+        self.base.args(&self.arguments).stdout(Stdio::inherit()).spawn()?;
 
         Ok(())
     }
 
-    fn flattern_arguments(&self) -> Vec<String> {
-        let mut arguments: Vec<String> = Vec::new();
-
-        for (key, value) in self.arguments.iter() {
-            if !key.is_empty() {
-                arguments.push(key.clone());
+    fn build_arguments(&mut self) {
+        match &self.raw_arguments.command {
+            arguments::GitCommand::Commit { message, kind } => {
+                self.arguments = self.get_commit_arguments(message, kind);
             }
-            if !value.is_empty() {
-                arguments.push(value.clone());
+
+            _ => {
+                println!("Unsupported command");
             }
         }
+    }
 
-        arguments
+    fn get_commit_arguments(&self, message: &String, kind: &arguments::GitCommitKind) -> Vec<String> {
+        let mut args = vec!["commit".to_string()];
+
+        args.push("-m".to_string());
+        args.push(format!("{:?}: {}", kind, message));
+
+        args
+    }
+
+    fn get_add_arguments(&self, files: &Vec<String>) -> Vec<String> {
+        let mut args = vec!["add".to_string()];  // Start with "git add"
+        args.extend(files.iter().cloned());       // Add the files to the arguments
+        args
     }
 }
