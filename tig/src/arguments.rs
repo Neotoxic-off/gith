@@ -2,16 +2,24 @@ use clap::{Parser, Subcommand};
 
 #[derive(Debug, Subcommand)]
 pub enum GitCommand {
-    Commit { kind: GitCommitKind, message: String},
+    Commit { kind: GitCommitKind, message: String }
 }
 
 #[derive(Debug, Clone, clap::ValueEnum)]
 pub enum GitCommitKind {
-    Feature,
-    Fix,
-    Release,
-    Deploy,
-    Documentation,
+    clean,
+    deploy,
+    documentation,
+    feature,
+    fix,
+    init,
+    library,
+    patch,
+    performance,
+    revert,
+    rework,
+    style,
+    test
 }
 
 #[derive(Parser)]

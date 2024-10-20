@@ -1,10 +1,12 @@
 use std::{fmt::format, process::{Command, Stdio}};
+use std::collections::HashMap;
 use crate::arguments;
 
 pub struct Git {
     base: Command,
     arguments: Vec<String>,
     raw_arguments: arguments::Arguments,
+    emoji: HashMap<String, String>
 }
 
 impl Git {
@@ -13,6 +15,21 @@ impl Git {
             base: Command::new("git"),
             arguments: Vec::new(),
             raw_arguments,
+            emoji: HashMap::from([
+                ("clean".to_string(), "🧽".to_string()),
+                ("deploy".to_string(), "🚀".to_string()),
+                ("documentation".to_string(), "📃".to_string()),
+                ("feature".to_string(), "🌱".to_string()),
+                ("fix".to_string(), "🔧".to_string()),
+                ("init".to_string(), "🎀".to_string()),
+                ("library".to_string(), "📚".to_string()),
+                ("patch".to_string(),  "🐜".to_string()),
+                ("performance".to_string(), "🌡".to_string()),
+                ("revert".to_string(),  "♻️".to_string()),
+                ("rework".to_string(), "🔸".to_string()),
+                ("style".to_string(), "🧁".to_string()),
+                ("test".to_string(), "🧪".to_string())
+            ])
         }
     }
 
