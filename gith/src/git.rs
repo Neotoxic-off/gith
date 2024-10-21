@@ -36,7 +36,6 @@ impl Git {
     pub fn exec(&mut self) -> std::io::Result<()> {
         self.build_arguments();
 
-        println!("{}", &self.arguments.concat());
         self.base.args(&self.arguments).stdout(Stdio::inherit()).spawn()?;
 
         Ok(())
@@ -47,16 +46,12 @@ impl Git {
             arguments::GitCommand::Commit { message, kind } => {
                 self.arguments = self.get_commit_arguments(message, kind);
             }
-            _ => {
-                println!("Unsupported command");
-            }
         }
     }
 
     fn get_commit_arguments(&self, message: &String, kind: &arguments::GitCommitKindFlags) -> Vec<String> {
         let mut args = vec!["commit".to_string()];
 
-        // Find the commit kind that is true and get its corresponding emoji.
         let commit_kind = self.get_commit_kind(kind);
         if let Some((kind_str, emoji)) = commit_kind {
             args.push("-m".to_string());
