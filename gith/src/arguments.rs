@@ -4,11 +4,15 @@ use clap::{Parser, Subcommand};
 pub enum GitCommand {
     Commit {
         message: String,
-
-        // The `ArgGroup` ensures only one of these flags can be selected.
         #[clap(flatten)]
-        kind: GitCommitKindFlags,
+        kind: GitCommitKindFlags
     },
+    Add {
+        content: Vec<String>
+    },
+    Push {
+        content: Vec<String>
+    }
 }
 
 #[derive(Debug, clap::Args)]
